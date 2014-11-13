@@ -12,45 +12,10 @@ These activities can be created using the UI provided by “workflow-winform-aut
 Here is the link to that sample : https://github.com/Developer-Autodesk/workflow-winform-autocad.io
 
 The scripts used by the custom activities are provided below :
-| 
-| 1)	Activity name : PlotToPNG
-| ;script start
-| FILEDIA
-| 0
-| -PLOT
-| Yes
-| Model
-| PublishToWeb PNG.pc3
-| VGA (640.00 x 480.00 Pixels)
-| Landscape
-| No
-| Extents
-| Fit
-| 
-| No
-| .
-| No
-| 
-| Result.png
-| No
-| Yes
-| 
-| ;script end
-| 
-| 2)	Activity name : CreateCloset
-| ; script start
-| (command "CreateCloset")
-| _.Zoom
-| Extents
-| _.VSCURRENT
-| sketchy
-| _.SaveAs
-| 
-| Result.dwg
-| 
-| ;script end
-| 
-| The script used by the CreateCloset activity makes use of a custom command named “CreateCloset”. 
+
+![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/CustomActivities.PNG)
+
+The script used by the CreateCloset activity makes use of a custom command named “CreateCloset”. 
 This is part of CreateCloset.bundle included in this sample. 
 Create an AppPackage using this bundle and link it to the CreateCloset activity while creating it.
 
@@ -95,10 +60,3 @@ This generate a drawing with the closet model using AutoCAD IO and this drawing 
 to the email id provided. A screenshot of the email that is sent is shown below.
 
 ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/6.png)
-
-
-
-
-
-
-
