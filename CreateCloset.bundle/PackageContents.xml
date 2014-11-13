@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0" AutodeskProduct="AutoCAD" ProductType="Application" Name="ACESTestLibTest" AppVersion="1.1.1" Description="ADN test" Author="Balaji" Icon="./Contents/Resources/Screenshot.png" AppNameSpace="appstore.exchange.autodesk.com" OnlineDocumentation="http://labs.autodesk.com/utilities/ADN_Plugins" HelpFile="./Contents/Resources/ADNScreenshotHelp.htm" ProductCode="{845962F4-7E1F-469F-88E4-CF9808E84F2C}" UpgradeCode="{04B9FE5C-E71B-47DF-B623-601AADFFACD5}" SupportedLocales="Enu" FriendlyVersion="1.0.0">
+  <CompanyDetails Name="Autodesk" Phone=" " Url="http://labs.autodesk.com/utilities/ADN_Plugins" Email="adn.apps@autodesk.com" />
+  <RuntimeRequirements />
+  <Components Description="2015 parts">
+    <RuntimeRequirements SupportPath="./Contents/Resources" OS="Win32|Win64" Platform="AutoCAD" SeriesMin="R20.0" SeriesMax="R20.0" />
+	<ComponentEntry AppName="AutoCADIOTestLib" ModuleName="./Contents/CustomPlugin.dll" AppDescription="ADN test" LoadOnAutoCADStartup="True">
+	<Commands >
+        <Command Local="CreateCloset" Global="CreateCloset" />
+	</Commands>
+    </ComponentEntry>
+  </Components>
+</ApplicationPackage>
