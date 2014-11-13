@@ -8,11 +8,11 @@ namespace MvcApplication2
 {
     class UserSettings
     {
-        public readonly static string CONSUMER_KEY = "Itt1antgoeR4YbjBIYkb8Ws26TVzgzE7";
-        public readonly static string CONSUMER_SECRET = "0eewZdviIFS89Kry";
+        public readonly static string CONSUMER_KEY = "";
+        public readonly static string CONSUMER_SECRET = "";
 
-        public readonly static string MAIL_USERNAME = "portathonws.adsk@gmail.com";
-        public readonly static string MAIL_PASSWORD = "portathon";
+        public readonly static string MAIL_USERNAME = "";
+        public readonly static string MAIL_PASSWORD = "";
 
         public readonly static string BASE_URL = "https://developer.api.autodesk.com";
     }
