@@ -96,7 +96,7 @@ namespace MvcApplication2.Controllers
             bucketReq.AddParameter("Content-Type", "application/json", ParameterType.HttpHeader);
 
             //bucketname is the name of the bucket.
-            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"servicesAllowed\":{},\"policy\":\"transient\"}";
+            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"policy\":\"temporary\"}";
             bucketReq.AddParameter("application/json", body, ParameterType.RequestBody);
 
            result = _client.Execute(bucketReq);
