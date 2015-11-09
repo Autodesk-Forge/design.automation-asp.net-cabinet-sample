@@ -29,7 +29,7 @@ namespace MvcApplication2.Models
         public string NumberOfDrawers { get; set; }
 
         [Display(Name = "Split Drawers ?")]
-        public bool IsSplitDrawers { get; set; }
+        public string IsSplitDrawers { get; set; }
 
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
@@ -50,7 +50,7 @@ namespace MvcApplication2.Models
             PlyThickness = "2";
             DoorHeightPercentage = "40";
             NumberOfDrawers = "3";
-            IsSplitDrawers = true;
+            IsSplitDrawers = "Yes";
             EmailAddress = "";
             ViewerURN = String.Empty;
             AccessToken = String.Empty;

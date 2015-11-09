@@ -119,7 +119,7 @@ function xmlHttpRequestHandler() {
 // Subsequent http requests to this domain will automatically send the cookie for authentication
 function setToken() {
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('POST', baseurl + '/utility/v1/settoken', false);
+    xmlhttp.open('POST', baseurl + '/utility/v1/settoken', true);
     xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xmlhttp.onreadystatechange = xmlHttpRequestHandler;
     xmlhttp.onerror = xmlHttpRequestErrorHandler;
@@ -135,7 +135,7 @@ function CheckTranslationProgress() {
         var base64URN = documentId;
 
         xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', baseurl + '/viewingservice/v1/' + base64URN, false);
+        xmlhttp.open('GET', baseurl + '/viewingservice/v1/' + base64URN, true);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 // From the response string, get the progress.
@@ -161,6 +161,7 @@ function CheckTranslationProgress() {
 function updateProgressBar(percentCompleted) {
     var percent = Math.round((percentCompleted * 100) / 100);
     document.getElementById("szliderbar").style.width = percent + '%';
+    document.getElementById("szliderbar").style.backgroundColor = '#0ff';
     document.getElementById("szazalek").innerHTML = percent + '%';
 }
 

@@ -8,13 +8,24 @@
 
 @using (Html.BeginForm()) 
 {
-    <div>
-        <fieldset>
-            <table style="width:25%">
-                <tr>
-                    <td>
+     <table style="width:100%;height:100%;border:hidden">
+            <tr>
+                <td style="border:hidden;vertical-align:top">
+                    <img src="@Url.Content("~/Images/autodesklogo.png")"/>
+                </td>
+                <td style="margin: 0;padding: 0;width:100%;height:100%;border:hidden;">
+                   <h1>Make your closet</h1>
+                </td>
+            </tr>
+        </table>
+    
+    <div style="width: 100%;height: 100%">
+        <table style="width:100%;height:100%;border:hidden">
+            <tr>
+                <td style="border:hidden">
+                    <fieldset>
                         <div class="editor-label">
-                            @Html.LabelFor(m => m.Width)
+                                @Html.LabelFor(m => m.Width)
                         </div>
                         <div class="editor-field">
                             @Html.TextBoxFor(m => m.Width)
@@ -65,7 +76,8 @@
                             @Html.LabelFor(m => m.IsSplitDrawers)
                         </div>
                         <div class="editor-field">
-                            @Html.CheckBoxFor(m => m.IsSplitDrawers)
+                            <label class="editor-label">@Html.RadioButtonFor(m => m.IsSplitDrawers, "Yes")Yes</label>
+                            <label class="editor-label">@Html.RadioButtonFor(m => m.IsSplitDrawers, "No")No</label>
                             @Html.ValidationMessageFor(m => m.IsSplitDrawers)
                         </div>
 
@@ -77,11 +89,10 @@
                             @Html.HiddenFor(m => m.ViewerURN, new {id = "ViewerURNFld"})
                         </div>
 
-                         <p>
-                            <input type="submit" name="Command" value="Preview"  onclick="busy()"/>
+                            <p>
+                            <input type="submit" name="Command" value="Preview"  onclick="busy()" style="border-radius: 10px;background-color:cyan"/>
                         </p>
-
-
+                        
                         <div class="editor-label">
                             @Html.LabelFor(m => m.EmailAddress)
                         </div>
@@ -91,22 +102,27 @@
                         </div>
 
                         <p>
-                            <input type="submit" name="Command" value="Send Email" onclick="busy()"/>
+                            <input type="submit" name="Command" value="Send Email" onclick="busy()" style="border-radius: 10px;background-color:cyan"/>
                         </p>
-                    </td>
-                    <td>
-                        <div id="3dViewDiv" class="dropdiv">
-                        </div>
-                    </td>
-                 </tr>
-            </table>
-        </fieldset>
+                    </fieldset>
+                </td>
+                <td style="margin: 0;padding: 0;width:100%;height:100%;border:hidden">
+                    <div id="3dViewDiv" style="border-style: solid;position: relative; top: 0px;left: 0px; width:100%; height:100%">
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
     
     <div id="szlider">
-        <div id="szliderbar">
+        <div id="szliderbar" style="width:0%;height:15px;border-right: 1px solid #000000;">
         </div>
         <div id="szazalek">
         </div>
     </div>
+    
+    <div style="width:100%;align-content:center;text-align:center">
+        <label style="color:blue;text-align:center;align-content:center">@ViewBag.Message</label>
+    </div>
+       
 }

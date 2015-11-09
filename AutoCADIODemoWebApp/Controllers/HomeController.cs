@@ -21,7 +21,7 @@ namespace MvcApplication2.Controllers
         private static string _doorHeightPercentage = String.Empty;
         private static string _numberOfDrawers = String.Empty;
         private static int _iNumOfDrawers = 1;
-        private static bool _isSplitDrawers = true;
+        private static string _isSplitDrawers = "Yes";
         private static string _emailAddress = String.Empty;
 
         // View and Data API 
@@ -266,7 +266,7 @@ namespace MvcApplication2.Controllers
                 // Create the closet drawing
                 String templateDwgPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BlankIso.dwg");
                             
-                String script = String.Format("CreateCloset{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}_.VSCURRENT{0}sketchy{0}_.Zoom{0}Extents{0}_.SaveAs{0}{0}Result.dwg{0}", Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _numberOfDrawers, _isSplitDrawers ? 1 : 0);
+                String script = String.Format("CreateCloset{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}_.VSCURRENT{0}sketchy{0}_.Zoom{0}Extents{0}_.SaveAs{0}{0}Result.dwg{0}", Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _numberOfDrawers, (_isSplitDrawers == "Yes") ? 1 : 0);
                 if (Autodesk.AcadIOUtils.UpdateActivity("CreateCloset", script))
                 {
                     String resultDrawingPath = String.Empty;
