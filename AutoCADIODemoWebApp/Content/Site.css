@@ -349,6 +349,8 @@ div#title {
 .display-label, 
 .editor-label {
     margin: 1em 0 0 0;
+    color: #000000;
+    font-weight: bold;
 }
 
 .display-field, 
