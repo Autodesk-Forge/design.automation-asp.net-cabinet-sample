@@ -22,7 +22,7 @@
     <div style="width: 100%;height: 100%">
         <table style="width:100%;height:100%;border:hidden">
             <tr>
-                <td style="border:hidden">
+                <td style="border-radius:1em; background:#e6e6e6;">
                     <fieldset>
                         <div class="editor-label">
                                 @Html.LabelFor(m => m.Width)
@@ -90,7 +90,7 @@
                         </div>
 
                             <p>
-                            <input type="submit" name="Command" value="Preview"  onclick="busy()" style="border-radius: 10px;background-color:cyan"/>
+                            <input type="submit" name="Command" value="Preview"  onclick="busy()" class="btn"/>
                         </p>
                         
                         <div class="editor-label">
@@ -102,12 +102,12 @@
                         </div>
 
                         <p>
-                            <input type="submit" name="Command" value="Send Email" onclick="busy()" style="border-radius: 10px;background-color:cyan"/>
+                            <input type="submit" name="Command" value="Send Email" onclick="busy()" class="btn"/>
                         </p>
                     </fieldset>
                 </td>
                 <td style="margin: 0;padding: 0;width:100%;height:100%;border:hidden">
-                    <div id="3dViewDiv" style="border-style: solid;position: relative; top: 0px;left: 0px; width:100%; height:100%">
+                    <div id="3dViewDiv" style="border:none; position: relative; top: 0px;left: 0px; width:100%; height:100%">
                     </div>
                 </td>
             </tr>
@@ -115,7 +115,7 @@
     </div>
     
     <div id="szlider">
-        <div id="szliderbar" style="width:0%;height:15px;border-right: 1px solid #000000;">
+        <div id="szliderbar" style="width:0%;height:15px;">
         </div>
         <div id="szazalek">
         </div>
