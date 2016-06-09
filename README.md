@@ -1,11 +1,24 @@
 workflow-aspdotnet-autocad.io
 =============================
 
-An ASP.Net Web application that uses AutoCAD IO and View&Data API to preview and create a closet drawing
+(Formely AutoCAD I/O)
 
-As this sample includes a reference to "library-dotnet-autocad.io", please build
-that sample following the instruction provided in that sample. Here is the link :
-https://github.com/Developer-Autodesk/library-dotnet-autocad.io
+[![.net](https://img.shields.io/badge/.net-4.5-green.svg)](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
+[![odata](https://img.shields.io/badge/odata-4.0-yellow.svg)](http://www.odata.org/documentation/)
+[![ver](https://img.shields.io/badge/Design%20Automation%20API-2.0-blue.svg)](https://developer.autodesk.com/api/autocadio/v2/)
+[![visual studio](https://img.shields.io/badge/Visual%20Studio-2012%7C2013-yellow.svg)](https://www.visualstudio.com/)
+[![License](http://img.shields.io/:license-mit-red.svg)](http://opensource.org/licenses/MIT)
+
+##Description
+
+An ASP.Net Web application that uses Design Automation and Derivitive API to preview and create a closet drawing
+
+##Dependencies
+* As this sample includes a reference to  [design.automation-.net-library](https://github.com/Developer-Autodesk/design.automation-.net-library), please build that sample firstly.  
+* Visual Studio 2012. 2013 or 2015 should be also fine, but has not yet been tested.
+* Get [credentials of AWS](http://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html) and create one S3 bucket
+* Get your credentials of Design Automation at http://developer.autodesk.com* 
+
 
 Also, please ensure that the following custom activities have been created in AutoCAD IO. 
 These activities can be created using the UI provided by “workflow-winform-autocad.io” sample if you wish. 
