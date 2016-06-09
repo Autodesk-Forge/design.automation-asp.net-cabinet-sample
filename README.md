@@ -11,65 +11,62 @@ workflow-aspdotnet-autocad.io
 
 ##Description
 
-An ASP.Net Web application that uses Design Automation and Derivitive API to preview and create a closet drawing
+An ASP.Net Web application that uses Design Automation and Viewer API to preview and create a closet drawing by customization.
 
 ##Dependencies
-* As this sample includes a reference to  [design.automation-.net-library](https://github.com/Developer-Autodesk/design.automation-.net-library), please build that sample firstly.  
+* As this sample includes a reference to  [design.automation-.net-library](https://github.com/Developer-Autodesk/design.automation-.net-library), please build that sample and get the class binary.  
 * Visual Studio 2012. 2013 or 2015 should be also fine, but has not yet been tested.
 * Get [credentials of AWS](http://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html) and create one S3 bucket
-* Get your credentials of Design Automation at http://developer.autodesk.com* 
+* Get your credentials (client key and client secret) of Design Automation at http://developer.autodesk.com 
+* [ObjectARX SDK] (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=773204). The SDK version depends on which AutoCAD verison you want to test with the AppPackage locally. In current test, the version is 2016.
 
-
-Also, please ensure that the following custom activities have been created in AutoCAD IO. 
-These activities can be created using the UI provided by “workflow-winform-autocad.io” sample if you wish. 
-Here is the link to that sample : https://github.com/Developer-Autodesk/workflow-winform-autocad.io
-
-The scripts used by the custom activities are provided below :
-
+##Setup/Usage Instructions
+* Firstly, test the workflow of package and workitem by Windows console program
+  * open the solution [](./CreateCloset.bundle/Custom-Apppackage/workflow-custom-activity-with-apppackage-autocad.io.sln)
+  * Unzip [ObjectARX SDK] (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=773204). Add AcCoreMgd, AcDbMgd from SDK/inc to the project *CustomPlugin*
+  * Build project *CustomPlugin*. It is better to test with local AutoCAD to verify the custom command
+  * Restore the packages of project **Client** by [NuGet](https://www.nuget.org/). The simplest way is to right click the project>>"Manage NuGet Packages for Solution" >> "Restore" (top right of dialog)
+  * Add other refererences in they are missing
+  * input your client key and client secret of Design Automation in line 19 and 20 of [Program.cs](./CreateCloset.bundle/Custom-Apppackage/Program.cs).
+  * Build the solution and run the solution
+  * Verify the whole process is working, and if a final drawing will be generated. 
+  * The scripts used by the custom activities are provided below :
 ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/CustomActivities.PNG)
 
-The script used by the CreateCloset activity makes use of a custom command named “CreateCloset”. 
-This is part of CreateCloset.bundle included in this sample. 
-Create an AppPackage using this bundle and link it to the CreateCloset activity while creating it.
+The script used by the CreateCloset activity makes use of a custom command named “CreateCloset” which is provided by *CustomPlugin*. The  CreateCloset activity will bind the package. 
 
-After you have the initial setup ready, 
-Open the AutoCADIODemoWebApp sample project in Visual Studio 2012
-Add reference to AutoCADIOUtil library
+*  Open the solution [AutoCADIODemoWebApp.sln](AutoCADIODemoWebApp.sln). 
+*  Restore the packages of project **Client** by [NuGet](https://www.nuget.org/). The simplest way is to right click the project>>"Manage NuGet Packages for Solution" >> "Restore" (top right of dialog)
+*  Add other refererences in they are missing
+*  input your client key and client secret of Design Automation, and AWS S3 bucket name in the project setting
+    [![](./assets/1.png)] 
 
-In the project settings, provide the following details:
--	AutoCAD IO Client Id
--	AutoCAD IO Client Secret
--	Bucket name in your AWS S3 Storage
+* input your AWS key and secret in [Web.config](Web.config).
+    [![](./assets/2.png)] 
 
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/1.png)
+* Open [UserSettings.cs](UserSettings.cs) file and input [Viewer API credentials](http://developer-autodesk.github.io/).
+* Build the solution and run it
+* in the webpage, configure some parameters and preview. The viewer will display the drawer model. 
 
-Open “Web.Config” file and provide AWS credentials. 
-This will allow the sample project to access Amazon S3 storage in your AWS profile.
-
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/2.png)
-
-Open “UserSettings.cs” file and provide View & Data API credentials. 
-This will allow the sample project to load the drawing in a viewer using Autodesk view & data API.
-
-Also provide your email credentials. 
-This will allow this web application to send the drawing as an attachment in an email.
+  * Also provide your email credentials. 
+    This will allow this web application to send the drawing as an attachment in an email.
 
 ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/3.png)
 
-Build the sample project
-Host the web app or run it locally. This will display the web page as shown in below screenshot :
+   * Build the sample project
+  Host the web app or run it locally. This will display the web page as shown in below screenshot :
 
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/4.png)
+   ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/4.png)
 
-Change the closet parameters as needed.
-Click on “Preview” button
-This generates a drawing with the closet model using AutoCAD IO and the drawing is loaded in the viewer
-as shown in below screenshot.
+  * Change the closet parameters as needed.
+      Click on “Preview” button
+      This generates a drawing with the closet model using AutoCAD IO and the drawing is loaded in the viewer
+      as shown in below screenshot.
 
 ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/5.png)
 
-Click on “Send Email” button
-This generate a drawing with the closet model using AutoCAD IO and this drawing is emailed as an attachment
-to the email id provided. A screenshot of the email that is sent is shown below.
+  * Click on “Send Email” button
+  This generate a drawing with the closet model using AutoCAD IO and this drawing is emailed as an attachment
+  to the email id provided. A screenshot of the email that is sent is shown below.
 
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/6.png)
+  ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/6.png)
