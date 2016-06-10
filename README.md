@@ -21,8 +21,8 @@ An ASP.Net Web application that uses Design Automation and Viewer API to preview
 * [ObjectARX SDK] (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=773204). The SDK version depends on which AutoCAD verison you want to test with the AppPackage locally. In current test, the version is 2016.
 
 ##Setup/Usage Instructions
-* Firstly, test the workflow of package and workitem by Windows console program
-  * open the solution [](./CreateCloset.bundle/Custom-Apppackage/workflow-custom-activity-with-apppackage-autocad.io.sln)
+* Firstly, test the workflow of package and workitem by Windows console program [Custom-Apppackage](CreateCloset.bundle/Custom-Apppackage)
+  * open the solution [Custom-Apppackage](CreateCloset.bundle/Custom-Apppackage)
   * Unzip [ObjectARX SDK] (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=773204). Add AcCoreMgd, AcDbMgd from SDK/inc to the project *CustomPlugin*
   * Build project *CustomPlugin*. It is better to test with local AutoCAD to verify the custom command
   * Restore the packages of project **Client** by [NuGet](https://www.nuget.org/). The simplest way is to right click the project>>"Manage NuGet Packages for Solution" >> "Restore" (top right of dialog)
