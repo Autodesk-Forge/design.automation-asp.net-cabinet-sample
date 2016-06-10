@@ -27,7 +27,10 @@ namespace MvcApplication2.Controllers
         // View and Data API 
         RestClient _client = new RestClient("https://developer.api.autodesk.com");
         static String _accessToken = String.Empty;
-        static String _bucketName = "autocadiobucket";
+
+        //make sure you have created a bucket with this name
+        static String _bucketName = "<your bucket name>";
+
         static Boolean _bucketFound = false;
         static String _closetDrawingPath = String.Empty; // for email attachment
         static String _imagePath = String.Empty; //  for email attachment
@@ -36,7 +39,7 @@ namespace MvcApplication2.Controllers
         public HomeController()
         {
             // Set up AutoCAD IO
-            Autodesk.AcadIOUtils.SetupAutoCADIOContainer(Properties.Settings.Default.AutoCADIOClientId, Properties.Settings.Default.AutoCADIOClientSecret);
+            Autodesk.AcadIOUtils.SetupAutoCADIOContainer(Properties.Settings.Default.DesignAutoClientId, Properties.Settings.Default.DesignAutoClientSecret);
 
             Autodesk.GeneralUtils.S3BucketName = Properties.Settings.Default.S3BucketName;
 
@@ -82,24 +85,24 @@ namespace MvcApplication2.Controllers
                 }
             }
 
-            if(! authenticationDone)
+            if (!authenticationDone)
             {
-                 ViewData["Message"] = "View and Data client authentication failed !";
+                ViewData["Message"] = "View and Data client authentication failed !";
                 _accessToken = String.Empty;
                 return;
             }
 
             RestRequest bucketReq = new RestRequest();
-            bucketReq.Resource = "oss/v1/buckets";
+            bucketReq.Resource = "oss/v2/buckets";
             bucketReq.Method = Method.POST;
             bucketReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
             bucketReq.AddParameter("Content-Type", "application/json", ParameterType.HttpHeader);
 
             //bucketname is the name of the bucket.
-            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"policy\":\"temporary\"}";
+            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"policyKey\":\"temporary\"}";
             bucketReq.AddParameter("application/json", body, ParameterType.RequestBody);
 
-           result = _client.Execute(bucketReq);
+            result = _client.Execute(bucketReq);
 
             if (result.StatusCode == System.Net.HttpStatusCode.Conflict ||
                 result.StatusCode == System.Net.HttpStatusCode.OK)
@@ -131,7 +134,7 @@ namespace MvcApplication2.Controllers
                 fileData = reader.ReadBytes(nlength);
             }
 
-            uploadReq.Resource = "oss/v1/buckets/" + _bucketName + "/objects/" + objectKey;
+            uploadReq.Resource = "oss/v2/buckets/" + _bucketName + "/objects/" + objectKey;
             uploadReq.Method = Method.PUT;
             uploadReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
             uploadReq.AddParameter("Content-Type", "application/stream");
@@ -145,7 +148,7 @@ namespace MvcApplication2.Controllers
                 string responseString = resp.Content;
 
                 int len = responseString.Length;
-                string id = "\"id\" : \"";
+                string id = "\"objectId\" : \"";
                 int index = responseString.IndexOf(id) + id.Length;
                 responseString = responseString.Substring(index, len - index - 1);
                 int index2 = responseString.IndexOf("\"");
@@ -215,7 +218,7 @@ namespace MvcApplication2.Controllers
                         if (String.Compare((string)key, "progress") == 0)
                         {
                             String percentComplete = (string)item;
-                            if(percentComplete.Contains("complete"))
+                            if (percentComplete.Contains("complete"))
                             {
                                 isComplete = true;
                                 break;
@@ -265,7 +268,7 @@ namespace MvcApplication2.Controllers
 
                 // Create the closet drawing
                 String templateDwgPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BlankIso.dwg");
-                            
+
                 String script = String.Format("CreateCloset{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}_.VSCURRENT{0}sketchy{0}_.Zoom{0}Extents{0}_.SaveAs{0}{0}Result.dwg{0}", Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _numberOfDrawers, (_isSplitDrawers == "Yes") ? 1 : 0);
                 if (Autodesk.AcadIOUtils.UpdateActivity("CreateCloset", script))
                 {
@@ -277,9 +280,11 @@ namespace MvcApplication2.Controllers
                     if (!String.IsNullOrEmpty(resultDrawingPath))
                     {
                         // Get a PNG image from the drawing for email attachment
-                        _imagePath = GetAutoCADIOResult(resultDrawingPath, "PlotToPNG");
 
-                        System.IO.File.Copy(_imagePath, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\Preview.png"), true);
+                        //optional: if you want to make snapshot of the new drawing.
+                        //_imagePath = GetAutoCADIOResult(resultDrawingPath, "PlotToPNG");
+                        //System.IO.File.Copy(_imagePath, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\Preview.png"), true);
+
                         _imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\Preview.png");
 
                         DateTime dt = DateTime.Now;
@@ -301,7 +306,7 @@ namespace MvcApplication2.Controllers
                         if (Command.Contains("Preview"))
                         {
                             // Get the urn to show in viewer
-                            if(_bucketFound)
+                            if (_bucketFound)
                             {
                                 UploadDrawingFile(_closetDrawingPath);
 
@@ -398,7 +403,7 @@ namespace MvcApplication2.Controllers
                     //thus <img src='cid:companylogo'> will map to a LinkedResource with a ContentId of 'companylogo'
                     System.Net.Mail.AlternateView htmlView = System.Net.Mail.AlternateView.CreateAlternateViewFromString("<html><body><h3>Here is a preview of the closet. AutoCAD drawing file is attached.</h3><br/><img src='cid:closetimg'/></body></html>", null, "text/html");
 
-                    if (! String.IsNullOrEmpty(_imagePath))
+                    if (!String.IsNullOrEmpty(_imagePath))
                     {
                         //create the LinkedResource (embedded image)
                         System.Net.Mail.LinkedResource closetLR = new System.Net.Mail.LinkedResource(_imagePath);
