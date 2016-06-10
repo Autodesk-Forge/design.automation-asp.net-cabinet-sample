@@ -30,7 +30,8 @@ An ASP.Net Web application that uses Design Automation and Viewer API to preview
   * input your client key and client secret of Design Automation in line 19 and 20 of [Program.cs](./CreateCloset.bundle/Custom-Apppackage/Program.cs).
   * Build the solution and run the solution
   * Verify the whole process is working, and if a final drawing will be generated. 
-  * The scripts used by the custom activities are provided below :
+  * The scripts used by the custom activities are provided below
+  
 ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/CustomActivities.PNG)
 
 The script used by the CreateCloset activity makes use of a custom command named “CreateCloset” which is provided by *CustomPlugin*. The  CreateCloset activity will bind the package. 
