@@ -33,9 +33,8 @@ An ASP.Net Web application that uses Design Automation and Viewer API to preview
   * Verify the whole process is working, and if a final drawing will be generated. 
   * The scripts used by the custom activities like  below
                         Script = "_tilemode\n1\n_filedia\n0\nCreateCloset\n6\n3\n8\n2\n40\n3\n1\n_.VSCURRENT\nsketchy\n_.Zoom\nExtents\n_.SaveAs\n\nResult.dwg\n"
-
-    * run   [Program.cs](./CreateCloset.bundle/Custom-Apppackage/Program.cs) and verify the activiy works well
-    * you can also use aother program of design automation to create an activity 
+* run   [Program.cs](./CreateCloset.bundle/Custom-Apppackage/Program.cs) and verify the activity works well
+* you can also use aother program of design automation to create an activity 
 
 The script used by the CreateCloset activity makes use of a custom command named “CreateCloset” which is provided by *CustomPlugin*. The  CreateCloset activity will bind the package. 
 
