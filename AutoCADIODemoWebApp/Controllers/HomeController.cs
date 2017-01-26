@@ -11,6 +11,26 @@ using RestSharp;
 
 namespace MvcApplication2.Controllers
 {
+
+    public class ForgeSrv{
+
+
+        //when you test this sample, check with developer portal of Forge if any endpoints are updated 
+        //and also the request/response format of the updated endpoint
+        //https://developer.autodesk.com
+
+
+        public static string forgeServiceBaseUrl = "https://developer.api.autodesk.com";
+        public static string autenticationUrl = "authentication/v1/authenticate";
+        public static string createBucketUrl = "oss/v2/buckets";
+        public static string uploadObjToBucketUrl = "oss/v2/buckets/{0}/objects/{1}";
+        public static string transJobUrl = "modelderivative/v2/designdata/job";
+        public static string transJobStatusUrl = "modelderivative/v2/designdata/{0}/manifest";
+
+        //make sure the activity has been created by any other program!
+        public static string designAuto_Act_Id = "CreateCloset"; 
+    }
+
     public class HomeController : Controller
     {
         // Closet parameters
@@ -25,11 +45,11 @@ namespace MvcApplication2.Controllers
         private static string _emailAddress = String.Empty;
 
         // View and Data API 
-        RestClient _client = new RestClient("https://developer.api.autodesk.com");
+        RestClient _client = new RestClient(ForgeSrv.forgeServiceBaseUrl);
         static String _accessToken = String.Empty;
 
         //make sure you have created a bucket with this name
-        static String _bucketName = "<your bucket name>";
+        static String _bucketName = Properties.Settings.Default.ForgeBucket;
 
         static Boolean _bucketFound = false;
         static String _closetDrawingPath = String.Empty; // for email attachment
@@ -38,12 +58,12 @@ namespace MvcApplication2.Controllers
 
         public HomeController()
         {
-            // Set up AutoCAD IO
-            Autodesk.AcadIOUtils.SetupAutoCADIOContainer(Properties.Settings.Default.DesignAutoClientId, Properties.Settings.Default.DesignAutoClientSecret);
+            // Set up Design Automation
+            Autodesk.AcadIOUtils.SetupAutoCADIOContainer(Properties.Settings.Default.ForgeClientId, Properties.Settings.Default.ForgeClientSecret);
 
             Autodesk.GeneralUtils.S3BucketName = Properties.Settings.Default.S3BucketName;
 
-            // Set up View and Data API
+            // Set up Forge Data Management, Derivitive, Viewer
             SetupViewer();
             //*/
         }
@@ -54,12 +74,13 @@ namespace MvcApplication2.Controllers
             bool authenticationDone = false;
 
             RestRequest authReq = new RestRequest();
-            authReq.Resource = "authentication/v1/authenticate";
+            authReq.Resource = ForgeSrv.autenticationUrl;
             authReq.Method = Method.POST;
             authReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            authReq.AddParameter("client_id", UserSettings.CONSUMER_KEY);
-            authReq.AddParameter("client_secret", UserSettings.CONSUMER_SECRET);
+            authReq.AddParameter("client_id", Properties.Settings.Default.ForgeClientId );
+            authReq.AddParameter("client_secret", Properties.Settings.Default.ForgeClientSecret );
             authReq.AddParameter("grant_type", "client_credentials");
+            authReq.AddParameter("scope", "data:read data:write bucket:create bucket:read");
 
             IRestResponse result = _client.Execute(authReq);
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
@@ -71,37 +92,26 @@ namespace MvcApplication2.Controllers
                 int index2 = responseString.IndexOf("\"");
                 _accessToken = responseString.Substring(0, index2);
 
-                //Set the token.
-                RestRequest setTokenReq = new RestRequest();
-                setTokenReq.Resource = "utility/v1/settoken";
-                setTokenReq.Method = Method.POST;
-                setTokenReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                setTokenReq.AddParameter("access-token", _accessToken);
-
-                IRestResponse resp = _client.Execute(setTokenReq);
-                if (resp.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    authenticationDone = true;
-                }
+                authenticationDone = true; 
             }
 
             if (!authenticationDone)
             {
-                ViewData["Message"] = "View and Data client authentication failed !";
+                ViewData["Message"] = "Forge authentication failed !";
                 _accessToken = String.Empty;
                 return;
             }
 
             RestRequest bucketReq = new RestRequest();
-            bucketReq.Resource = "oss/v2/buckets";
+            bucketReq.Resource = ForgeSrv.createBucketUrl ;
             bucketReq.Method = Method.POST;
             bucketReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
             bucketReq.AddParameter("Content-Type", "application/json", ParameterType.HttpHeader);
 
             //bucketname is the name of the bucket.
-            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"policyKey\":\"temporary\"}";
+            string body = "{\"bucketKey\":\"" + _bucketName + "\",\"policyKey\":\"transient\"}";
             bucketReq.AddParameter("application/json", body, ParameterType.RequestBody);
-
+ 
             result = _client.Execute(bucketReq);
 
             if (result.StatusCode == System.Net.HttpStatusCode.Conflict ||
@@ -111,7 +121,7 @@ namespace MvcApplication2.Controllers
             }
             else
             {
-                ViewData["Message"] = "View and Data bucket could not be accessed !";
+                ViewData["Message"] = "Forge bucket can not be accessed !";
                 _bucketFound = false;
                 return;
             }
@@ -134,7 +144,7 @@ namespace MvcApplication2.Controllers
                 fileData = reader.ReadBytes(nlength);
             }
 
-            uploadReq.Resource = "oss/v2/buckets/" + _bucketName + "/objects/" + objectKey;
+            uploadReq.Resource = string.Format(ForgeSrv.uploadObjToBucketUrl, _bucketName, objectKey);
             uploadReq.Method = Method.PUT;
             uploadReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
             uploadReq.AddParameter("Content-Type", "application/stream");
@@ -158,13 +168,35 @@ namespace MvcApplication2.Controllers
                 string urn64 = Convert.ToBase64String(bytes);
 
                 RestRequest bubleReq = new RestRequest();
-                bubleReq.Resource = "viewingservice/v1/register";
+                bubleReq.Resource = ForgeSrv.transJobUrl;
                 bubleReq.Method = Method.POST;
                 bubleReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
                 bubleReq.AddParameter("Content-Type", "application/json;charset=utf-8", ParameterType.HttpHeader);
+                bubleReq.AddParameter("x-ads-force", true , ParameterType.HttpHeader);
 
-                string body = "{\"urn\":\"" + urn64 + "\"}";
-                bubleReq.AddParameter("application/json", body, ParameterType.RequestBody);
+
+                string transJobInputParam = "{" +
+                                                    "\"input\":" +
+                                                    "{" +
+                                                         "\"urn\": \""+ urn64 + "\"" +
+                                                     "}," +
+                                                     " \"output\":" +
+                                                     "{ " +
+                                                        "\"destination\":" +
+                                                         "{" +
+                                                             " \"region\": \"us\" " +
+                                                          " }, " +
+                                                        "\"formats\":" +
+                                                             "[" +
+                                                                 "{" +
+                                                                    "\"type\": \"svf\"," +
+                                                                     "\"views\":[\"2d\", \"3d\"]" +
+                                                                   "}" +
+                                                               "]" +
+                                                       "}" +
+                                                     "}";
+
+                 bubleReq.AddParameter("application/json", transJobInputParam, ParameterType.RequestBody);
 
                 IRestResponse BubbleResp = _client.Execute(bubleReq);
 
@@ -198,7 +230,7 @@ namespace MvcApplication2.Controllers
                 return false;
 
             RestRequest statusReq = new RestRequest();
-            statusReq.Resource = "/viewingservice/v1/" + _fileUrn;
+            statusReq.Resource = string.Format(ForgeSrv.transJobStatusUrl, _fileUrn);
             statusReq.Method = Method.GET;
             statusReq.AddParameter("Authorization", "Bearer " + _accessToken, ParameterType.HttpHeader);
             IRestResponse result = _client.Execute(statusReq);
@@ -270,12 +302,15 @@ namespace MvcApplication2.Controllers
                 String templateDwgPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BlankIso.dwg");
 
                 String script = String.Format("CreateCloset{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}_.VSCURRENT{0}sketchy{0}_.Zoom{0}Extents{0}_.SaveAs{0}{0}Result.dwg{0}", Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _numberOfDrawers, (_isSplitDrawers == "Yes") ? 1 : 0);
-                if (Autodesk.AcadIOUtils.UpdateActivity("CreateCloset", script))
+
+                //make sure the activity has been created by other program!!
+
+                if (Autodesk.AcadIOUtils.UpdateActivity(ForgeSrv.designAuto_Act_Id , script))
                 {
                     String resultDrawingPath = String.Empty;
 
                     // Get the AutoCAD IO result by running "CreateCloset" activity
-                    resultDrawingPath = GetAutoCADIOResult(templateDwgPath, "CreateCloset");
+                    resultDrawingPath = GetAutoCADIOResult(templateDwgPath, ForgeSrv.designAuto_Act_Id);
 
                     if (!String.IsNullOrEmpty(resultDrawingPath))
                     {
