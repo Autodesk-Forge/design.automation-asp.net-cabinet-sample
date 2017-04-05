@@ -69,3 +69,14 @@ The script used by the CreateCloset activity makes use of a custom command named
   to the email id provided. A screenshot of the email that is sent is shown below.
 
   ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/6.png)
+  
+  
+# License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Please see the [LICENSE](LICENSE) file for full details.
+
+
+## Written by
+
+[Balaji Ramamoorthy](https://github.com/BalajiRamamoorthy). Maintained by [Xiaodong Liang] (https://github.com/xiaodongliang/) [Forge Partner Development](http://forge.autodesk.com)
