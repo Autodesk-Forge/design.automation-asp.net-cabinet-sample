@@ -50,22 +50,33 @@ The script used by the CreateCloset activity makes use of a custom command named
   * Also provide your email credentials. 
     This will allow this web application to send the drawing as an attachment in an email.
 
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/3.png)
+![Picture](./assets/3.png)
 
    * Build the sample project
   Host the web app or run it locally. This will display the web page as shown in below screenshot :
 
-   ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/4.png)
+   ![Picture](./assets/4.png)
 
   * Change the closet parameters as needed.
       Click on “Preview” button
       This generates a drawing with the closet model using AutoCAD Automation and the drawing is loaded in the viewer
       as shown in below screenshot.
 
-![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/5.png)
+![Picture](./assets/5.png)
 
   * Click on “Send Email” button
   This generate a drawing with the closet model using AutoCAD Design Automation and this drawing is emailed as an attachment
   to the email id provided. A screenshot of the email that is sent is shown below.
 
   ![Picture](https://github.com/Developer-Autodesk/workflow-aspdotnet-autocad.io/blob/master/assets/6.png)
+  
+  
+# License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Please see the [LICENSE](LICENSE) file for full details.
+
+
+## Written by
+
+[Balaji Ramamoorthy](https://github.com/BalajiRamamoorthy). Maintained by [Xiaodong Liang](https://github.com/xiaodongliang/) [Forge Partner Development](http://forge.autodesk.com)
