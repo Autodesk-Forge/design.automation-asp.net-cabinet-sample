@@ -425,18 +425,28 @@ namespace MvcApplication2.Controllers
                     mail.To.Add(_emailAddress);
 
                     //set the content
-                    mail.Subject = "Closet Drawing";
+                    mail.Subject = "Bureau Drawing";
                     mail.Attachments.Add(new System.Net.Mail.Attachment(_closetDrawingPath));
 
                     //first we create the Plain Text part
                     System.Net.Mail.AlternateView plainView = System.Net.Mail.AlternateView.CreateAlternateViewFromString(String.Format("{0}Width (feet) : {1}{0}Depth (feet) : {2}{0}Height (feet) : {3}{0}Ply Thickness (inches) : {4}{0}Door Height as % of total height: {5}{0}Number of drawers : {6}{0}Is Split drawers ? : {7}{0}"
                         , Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _iNumOfDrawers, _isSplitDrawers), null, "text/plain");
 
+                    string desc = String.Format("{0}Width (feet) : {1}{0}<br/>"+ 
+                        "Depth (feet) : {2}{0}"+
+                        "<br/>Height (feet) : {3}{0}"+
+                        "<br/>Ply Thickness (inches) : {4}{0}<br/>"+
+                        "Door Height as % of total height: {5}{0}<br/>"+
+                        "Number of drawers : {6}{0}<br/>"+
+                        "Is Split drawers ? : {7}{0}"
+                        , Environment.NewLine, _width, _depth, _height, _plyThickness, _doorHeightPercentage, _iNumOfDrawers, _isSplitDrawers);
+
                     //then we create the Html part
                     //to embed images, we need to use the prefix 'cid' in the img src value
                     //the cid value will map to the Content-Id of a Linked resource.
                     //thus <img src='cid:companylogo'> will map to a LinkedResource with a ContentId of 'companylogo'
-                    System.Net.Mail.AlternateView htmlView = System.Net.Mail.AlternateView.CreateAlternateViewFromString("<html><body><h3>Here is a preview of the closet. AutoCAD drawing file is attached.</h3><br/><img src='cid:closetimg'/></body></html>", null, "text/html");
+                    System.Net.Mail.AlternateView htmlView = System.Net.Mail.AlternateView.CreateAlternateViewFromString(
+                        "<html><body><h3>Here is a preview of the closet. AutoCAD drawing file is attached.</h3><br/><h4>"+desc+"<img src='cid:closetimg'/></body></html>", null, "text/html");
 
                     if (!String.IsNullOrEmpty(_imagePath))
                     {
@@ -444,14 +454,20 @@ namespace MvcApplication2.Controllers
                         System.Net.Mail.LinkedResource closetLR = new System.Net.Mail.LinkedResource(_imagePath);
                         closetLR.ContentId = "closetimg";
                         htmlView.LinkedResources.Add(closetLR);
+                        System.Net.Mime.ContentType contenttype = new System.Net.Mime.ContentType();
+                        contenttype.MediaType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                        closetLR.ContentType = contenttype;
                     }
 
                     //add the views
-                    mail.AlternateViews.Add(plainView);
+                    //mail.AlternateViews.Add(plainView);
                     mail.AlternateViews.Add(htmlView);
 
                     //send the message
-                    using (System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com", 587))
+                    //replace the arguments of SmtpClient with the configuration of your sender email
+
+                    using (System.Net.Mail.SmtpClient smtpClient = 
+                        new System.Net.Mail.SmtpClient("smtp-mail.outlook.com", 587))
                     {
                         smtpClient.Credentials = new System.Net.NetworkCredential(UserSettings.MAIL_USERNAME, UserSettings.MAIL_PASSWORD);
                         smtpClient.EnableSsl = true;
