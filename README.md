@@ -62,7 +62,7 @@ The script used by the CreateCloset activity makes use of a custom command named
       This generates a drawing with the closet model using AutoCAD Automation and the drawing is loaded in the viewer
       as shown in below screenshot.
 
-![Picture](./assets/5.png)
+![thumbnail](./assets/5.png)
 
   * Click on “Send Email” button
   This generate a drawing with the closet model using AutoCAD Design Automation and this drawing is emailed as an attachment
