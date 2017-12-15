@@ -5,8 +5,8 @@ Design Automation ASP.net Cabinet Sample
 
 [![.net](https://img.shields.io/badge/.net-4.5-green.svg)](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
 [![odata](https://img.shields.io/badge/odata-4.0-yellow.svg)](http://www.odata.org/documentation/)
-[![ver](https://img.shields.io/badge/Design%20Automation%20API-2.0-blue.svg)](https://developer.autodesk.com/en/docs/design-automation/v2)
-[![ver](https://img.shields.io/badge/Forge%20Viewer-2.11-yellow.svg)](https://developer.autodesk.com/en/docs/viewer/v2)
+[![Design Automation](https://img.shields.io/badge/Design%20Automation-v2-green.svg)](http://developer.autodesk.com/)
+[![Viewer](https://img.shields.io/badge/Viewer-2.11-yellow.svg)](https://developer.autodesk.com/en/docs/viewer/v2)
 [![visual studio](https://img.shields.io/badge/Visual%20Studio-2012%7C2013%7C2015-green.svg)](https://www.visualstudio.com/)
 [![License](http://img.shields.io/:license-mit-red.svg)](http://opensource.org/licenses/MIT)
 
