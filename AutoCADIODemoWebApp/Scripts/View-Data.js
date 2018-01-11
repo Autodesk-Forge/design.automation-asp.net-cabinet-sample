@@ -135,7 +135,7 @@ function CheckTranslationProgress() {
         var base64URN = documentId;
 
         xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', baseurl + '/viewingservice/v1/' + base64URN, true);
+        xmlhttp.open('GET', baseurl + '/modelderivative/v2/designdata/' + base64URN + '/manifest', true);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 // From the response string, get the progress.

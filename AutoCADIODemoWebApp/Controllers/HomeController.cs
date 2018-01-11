@@ -497,7 +497,9 @@ namespace MvcApplication2.Controllers
                 try
                 {
                     // Step 1 : Upload the drawing to S3 storage
-                    String hostDwgS3Url = Autodesk.GeneralUtils.UploadDrawingToS3(drawingPath);
+                    //String hostDwgS3Url = Autodesk.GeneralUtils.UploadDrawingToS3(drawingPath);
+
+                    String hostDwgS3Url = "http://forge-test.oss-cn-shanghai.aliyuncs.com/BlankIso.dwg";
 
                     if (String.IsNullOrEmpty(hostDwgS3Url))
                         return "UploadDrawingToS3 returned empty url";
