@@ -27,6 +27,7 @@ An ASP.Net Web application that uses Design Automation and Viewer API to preview
   * Unzip [ObjectARX SDK] (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=773204). Add AcCoreMgd, AcDbMgd from SDK/inc to the project *CustomPlugin*
   * Build project *CustomPlugin*. It is better to test with local AutoCAD to verify the custom command
   * Restore the packages of project **Client** by [NuGet](https://www.nuget.org/). The simplest way is to right click the project>>"Manage NuGet Packages for Solution" >> "Restore" (top right of dialog)
+  * Restore the reference of AutoCADIOUtil from [design.automation-.net-library](https://github.com/Developer-Autodesk/design.automation-.net-library)
   * Add other refererences in they are missing
   * input your client key and client secret of Design Automation in line 19 and 20 of [Program.cs](./CreateCloset.bundle/Custom-Apppackage/Program.cs).
   * Build the solution and run the solution
